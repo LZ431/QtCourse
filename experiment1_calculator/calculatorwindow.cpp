@@ -30,6 +30,72 @@ CalculatorWindow::CalculatorWindow(QWidget *parent)
     , ui(new Ui::CalculatorWindow)
 {
     ui->setupUi(this);
+    setStyleSheet(QStringLiteral(R"(
+        QWidget#CalculatorWindow {
+            background: #eef4fa;
+        }
+        QFrame#displayFrame {
+            background: #ffffff;
+            border: 1px solid #dbe6f0;
+            border-radius: 24px;
+        }
+        QLabel#expressionLabel {
+            background: transparent;
+            color: #718397;
+            font-size: 18px;
+            padding: 1px 4px;
+        }
+        QLabel#displayLabel {
+            background: transparent;
+            color: #142b3d;
+            font-size: 42px;
+            font-weight: 600;
+            padding: 2px 4px;
+        }
+        QPushButton {
+            background: #ffffff;
+            border: 1px solid #e1eaf2;
+            border-radius: 16px;
+            color: #1d3345;
+            font-size: 22px;
+            font-weight: 500;
+        }
+        QPushButton:hover {
+            background: #f6faff;
+            border-color: #b9d7ef;
+        }
+        QPushButton:pressed {
+            background: #dcecf9;
+        }
+        QPushButton#clearButton,
+        QPushButton#backspaceButton {
+            background: #e8f2fb;
+            border-color: #d6e7f6;
+            color: #1d79c4;
+            font-size: 20px;
+        }
+        QPushButton#divideButton,
+        QPushButton#multiplyButton,
+        QPushButton#subtractButton,
+        QPushButton#addButton {
+            background: #f1f7fd;
+            color: #1074c8;
+            font-size: 26px;
+        }
+        QPushButton#equalsButton {
+            background: #1c84db;
+            border-color: #1c84db;
+            color: #ffffff;
+            font-size: 27px;
+            font-weight: 600;
+        }
+        QPushButton#equalsButton:hover {
+            background: #1675c5;
+        }
+        QPushButton#equalsButton:pressed {
+            background: #1265a9;
+        }
+    )"));
     setFocusPolicy(Qt::StrongFocus);
     connectMouseButtons();
     refreshDisplay();
