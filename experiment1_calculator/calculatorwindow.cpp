@@ -5,6 +5,26 @@
 #include <QKeyEvent>
 #include <QPushButton>
 
+namespace {
+QChar normalizeOperator(QChar character)
+{
+    if (character == QChar(0x00D7) || character == QLatin1Char('x')
+        || character == QLatin1Char('X')) {
+        return QLatin1Char('*');
+    }
+    if (character == QChar(0x00F7)) {
+        return QLatin1Char('/');
+    }
+    if (character == QChar(0x2212)) {
+        return QLatin1Char('-');
+    }
+    if (character == QChar(0xFF0B)) {
+        return QLatin1Char('+');
+    }
+    return character;
+}
+}
+
 CalculatorWindow::CalculatorWindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::CalculatorWindow)
@@ -13,6 +33,7 @@ CalculatorWindow::CalculatorWindow(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     connectMouseButtons();
     refreshDisplay();
+    setFocus(Qt::OtherFocusReason);
 }
 
 CalculatorWindow::~CalculatorWindow()
@@ -22,6 +43,74 @@ CalculatorWindow::~CalculatorWindow()
 
 void CalculatorWindow::keyPressEvent(QKeyEvent *event)
 {
+    if (event->modifiers().testFlag(Qt::ControlModifier)
+        || event->modifiers().testFlag(Qt::AltModifier)
+        || event->modifiers().testFlag(Qt::MetaModifier)) {
+        QWidget::keyPressEvent(event);
+        return;
+    }
+
+    if (event->isAutoRepeat()) {
+        event->accept();
+        return;
+    }
+
+    const QString text = event->text();
+    if (!text.isEmpty()) {
+        const QChar character = text.front();
+        const int digit = character.digitValue();
+        if (digit >= 0 && digit <= 9) {
+            inputDigit(digit);
+            event->accept();
+            return;
+        }
+
+        if (character == QLatin1Char('.') || character == QChar(0xFF0E)) {
+            inputDecimalPoint();
+            event->accept();
+            return;
+        }
+
+        const QChar operation = normalizeOperator(character);
+        if (QStringLiteral("+-*/").contains(operation)) {
+            selectOperator(operation);
+            event->accept();
+            return;
+        }
+
+        if (character == QLatin1Char('=')) {
+            evaluate();
+            event->accept();
+            return;
+        }
+
+        if (character == QLatin1Char('c') || character == QLatin1Char('C')) {
+            clearAll();
+            event->accept();
+            return;
+        }
+    }
+
+    switch (event->key()) {
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+    case Qt::Key_Equal:
+        evaluate();
+        event->accept();
+        return;
+    case Qt::Key_Backspace:
+        backspace();
+        event->accept();
+        return;
+    case Qt::Key_Escape:
+    case Qt::Key_Delete:
+        clearAll();
+        event->accept();
+        return;
+    default:
+        break;
+    }
+
     QWidget::keyPressEvent(event);
 }
 
