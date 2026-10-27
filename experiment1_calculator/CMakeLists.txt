@@ -16,6 +16,8 @@ qt_standard_project_setup()
 
 qt_add_executable(KeyboardCalculator
     main.cpp
+    calculatorlogic.cpp
+    calculatorlogic.h
     calculatorwindow.cpp
     calculatorwindow.h
     calculatorwindow.ui
