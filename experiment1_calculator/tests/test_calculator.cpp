@@ -48,6 +48,7 @@ private slots:
     void resultCanStartNewCalculation();
     void resultCanContinueWithAnotherOperator();
     void divisionByZeroCanRecover();
+    void smallNonZeroValuesAreNotTreatedAsZero();
     void equalsWithoutRightOperandReusesLeftValue();
     void leadingZeroAndBackspaceAreHandled();
     void keyboardAndMouseUseConsistentResults();
@@ -140,6 +141,21 @@ void CalculatorTest::divisionByZeroCanRecover()
     calculator.inputDigit(7);
     QVERIFY(!calculator.hasError());
     QCOMPARE(calculator.displayText(), QStringLiteral("7"));
+}
+
+void CalculatorTest::smallNonZeroValuesAreNotTreatedAsZero()
+{
+    CalculatorLogic calculator;
+    enterOperation(calculator, QStringLiteral("1/0.0000000000001="));
+
+    QVERIFY(!calculator.hasError());
+    QCOMPARE(calculator.displayText(), QStringLiteral("10000000000000"));
+
+    calculator.clear();
+    enterOperation(calculator, QStringLiteral("1/10000000000000="));
+
+    QVERIFY(!calculator.hasError());
+    QCOMPARE(calculator.displayText(), QStringLiteral("1E-13"));
 }
 
 void CalculatorTest::equalsWithoutRightOperandReusesLeftValue()

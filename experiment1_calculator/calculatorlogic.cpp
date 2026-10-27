@@ -214,7 +214,7 @@ bool CalculatorLogic::calculate(double rightOperand)
         result = m_accumulator * rightOperand;
         break;
     case '/':
-        if (qFuzzyIsNull(rightOperand)) {
+        if (rightOperand == 0.0) {
             m_display = QStringLiteral("错误");
             m_accumulator = 0.0;
             m_pendingOperator = QChar();
@@ -255,7 +255,7 @@ double CalculatorLogic::currentValue() const
 
 QString CalculatorLogic::formatNumber(double value)
 {
-    if (qFuzzyIsNull(value)) {
+    if (value == 0.0) {
         value = 0.0;
     }
 
