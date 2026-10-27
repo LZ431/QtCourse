@@ -7,4 +7,5 @@ experiment1_calculator/*.user
 # Local test and capture output
 experiment1_calculator/captures/
 experiment1_calculator/Testing/
+experiment1_calculator/.tools/
 
