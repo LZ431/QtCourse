@@ -55,6 +55,9 @@ if(BUILD_TESTING)
     target_include_directories(CalculatorTests PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
     )
+    set_target_properties(CalculatorTests PROPERTIES
+        WIN32_EXECUTABLE FALSE
+    )
 
     if(MINGW OR MSVC)
         target_compile_options(CalculatorTests PRIVATE
@@ -67,5 +70,19 @@ if(BUILD_TESTING)
         ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
     )
 endif()
+
+qt_add_executable(CaptureScreenshots
+    tools/capture_screenshots.cpp
+    calculatorwindow.cpp
+    calculatorwindow.h
+    calculatorwindow.ui
+    calculatorlogic.cpp
+    calculatorlogic.h
+)
+
+target_link_libraries(CaptureScreenshots PRIVATE Qt6::Widgets)
+target_include_directories(CaptureScreenshots PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 
