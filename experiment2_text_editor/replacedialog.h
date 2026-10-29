@@ -17,6 +17,7 @@ public:
     QString searchText() const;
     QString replacementText() const;
     void setSearchText(const QString &text);
+    void setReplacementText(const QString &text);
     Qt::CaseSensitivity caseSensitivity() const;
     bool forward() const;
     void focusSearchField();

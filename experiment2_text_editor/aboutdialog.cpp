@@ -10,7 +10,7 @@ AboutDialog::AboutDialog(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
-    setWindowTitle(QStringLiteral("关于 小牛文本编辑器"));
+    setWindowTitle(QStringLiteral("关于 文本编辑器"));
     setWindowIcon(QIcon(QStringLiteral(":/icons/app.svg")));
 
     connect(ui->okButton, &QPushButton::clicked,

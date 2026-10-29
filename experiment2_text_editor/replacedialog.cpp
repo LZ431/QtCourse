@@ -50,6 +50,11 @@ void ReplaceDialog::setSearchText(const QString &text)
     }
 }
 
+void ReplaceDialog::setReplacementText(const QString &text)
+{
+    ui->replacementLineEdit->setText(text);
+}
+
 Qt::CaseSensitivity ReplaceDialog::caseSensitivity() const
 {
     return ui->caseSensitiveCheckBox->isChecked()
