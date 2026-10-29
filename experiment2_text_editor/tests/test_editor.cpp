@@ -2,11 +2,15 @@
 #include "codeeditor.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QClipboard>
 #include <QFile>
 #include <QFileInfo>
+#include <QMessageBox>
+#include <QPushButton>
 #include <QTemporaryDir>
 #include <QTextCursor>
+#include <QTimer>
 #include <QtTest>
 
 class EditorTests final : public QObject
@@ -20,6 +24,7 @@ private slots:
     void replaceAllHandlesCaseAndMissingText();
     void lineNumberVisibilityChangesViewportMargin();
     void editActionsFollowSelectionAndHistory();
+    void unsavedClosePromptCanBeCancelled();
 };
 
 void EditorTests::saveAndReopenRoundTrip()
@@ -168,6 +173,35 @@ void EditorTests::editActionsFollowSelectionAndHistory()
     redoAction->trigger();
     QCoreApplication::processEvents();
     QCOMPARE(window.plainText(), QString());
+}
+
+void EditorTests::unsavedClosePromptCanBeCancelled()
+{
+    MainWindow window;
+    window.show();
+    window.editor()->insertPlainText(QStringLiteral("尚未保存的内容"));
+    QVERIFY(window.hasUnsavedChanges());
+
+    QTimer::singleShot(50, [] {
+        auto *messageBox =
+            qobject_cast<QMessageBox *>(QApplication::activeModalWidget());
+        if (messageBox) {
+            messageBox->button(QMessageBox::Cancel)->click();
+        }
+    });
+    QVERIFY(!window.close());
+    QVERIFY(window.isVisible());
+    QVERIFY(window.hasUnsavedChanges());
+
+    QTimer::singleShot(50, [] {
+        auto *messageBox =
+            qobject_cast<QMessageBox *>(QApplication::activeModalWidget());
+        if (messageBox) {
+            messageBox->button(QMessageBox::Discard)->click();
+        }
+    });
+    QVERIFY(window.close());
+    QVERIFY(!window.isVisible());
 }
 
 QTEST_MAIN(EditorTests)

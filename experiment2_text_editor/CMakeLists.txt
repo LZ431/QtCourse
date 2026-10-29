@@ -98,6 +98,7 @@ if(BUILD_TESTING)
     add_test(NAME text_editor_tests COMMAND TextEditorTests)
     set_tests_properties(text_editor_tests PROPERTIES
         ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
+        TIMEOUT 30
     )
 endif()
 
