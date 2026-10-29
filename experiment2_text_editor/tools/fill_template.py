@@ -160,29 +160,20 @@ def fill_cover(document: Document) -> None:
             break
 
     table = document.tables[0]
-    cover_values = {
-        1: DEVELOPER,
-        3: STUDENT_ID,
-        5: "",
-        7: "",
-        9: "2026年10月29日",
-        11: "",
-    }
-    unique_cells = []
-    seen = set()
-    for row in table.rows[:3]:
-        for cell in row.cells:
-            if id(cell._tc) not in seen:
-                seen.add(id(cell._tc))
-                unique_cells.append(cell)
-
-    for index, value in cover_values.items():
-        if index < len(unique_cells):
-            cell = unique_cells[index]
-            if cell.paragraphs:
-                set_paragraph_text(cell.paragraphs[0], value)
-            elif value:
-                cell.add_paragraph(value)
+    rows = table.rows
+    cover_values = [
+        (rows[1].cells[1], DEVELOPER),
+        (rows[1].cells[3], STUDENT_ID),
+        (rows[1].cells[5], ""),
+        (rows[2].cells[1], ""),
+        (rows[2].cells[3], "2026年10月29日"),
+        (rows[2].cells[5], ""),
+    ]
+    for cell, value in cover_values:
+        if cell.paragraphs:
+            set_paragraph_text(cell.paragraphs[0], value)
+        elif value:
+            cell.add_paragraph(value)
 
 
 def git_log_for_project() -> str:
@@ -457,8 +448,9 @@ def fill_content(document: Document) -> None:
         content_cell,
         anchor,
         "执行 ctest --test-dir build --output-on-failure，构建目录 1/1 测试通过，"
-        "退出码为 0。QtTest 中共有 6 个功能测试，覆盖 UTF-8 保存/重开、缺失文件、"
-        "二进制文件、连续与环绕查找、大小写不敏感全部替换、行号显隐及动作状态。",
+        "退出码为 0。QtTest 中共有 7 个功能测试，覆盖 UTF-8 保存/重开、缺失文件、"
+        "二进制文件、连续与环绕查找、大小写不敏感全部替换、行号显隐、动作状态"
+        "以及未保存关闭提示。",
         "自动化结果：",
     )
     anchor = add_code(
@@ -493,6 +485,11 @@ def fill_content(document: Document) -> None:
             "边界 4（替换未命中）：",
             "全部替换一个不存在的词。替换数量为 0，文档内容不变，界面提示“未找到”。"
             "测试结果通过。",
+        ),
+        (
+            "边界 5（未保存关闭）：",
+            "修改文档后关闭窗口，先选择取消，窗口和内容继续保留；再次关闭并选择"
+            "放弃，窗口正常退出。测试结果通过。",
         ),
     ]
     for label, text in edge_cases:
