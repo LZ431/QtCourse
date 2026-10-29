@@ -8,4 +8,10 @@ experiment1_calculator/*.user
 experiment1_calculator/captures/
 experiment1_calculator/Testing/
 experiment1_calculator/.tools/
+experiment2_text_editor/build/
+experiment2_text_editor/.qtcreator/
+experiment2_text_editor/*.user
+experiment2_text_editor/captures/
+experiment2_text_editor/Testing/
+experiment2_text_editor/.tools/
 
