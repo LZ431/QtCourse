@@ -102,6 +102,8 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::showFindDialog);
     connect(ui->actionReplace, &QAction::triggered,
             this, &MainWindow::showReplaceDialog);
+    connect(ui->actionAbout, &QAction::triggered,
+            this, &MainWindow::showAboutDialog);
     connect(ui->actionFont, &QAction::triggered,
             this, &MainWindow::chooseFont);
     connect(ui->actionTextColor, &QAction::triggered,

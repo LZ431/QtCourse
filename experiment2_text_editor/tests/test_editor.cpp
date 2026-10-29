@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "codeeditor.h"
+#include "aboutdialog.h"
 
 #include <QAction>
 #include <QApplication>
@@ -25,6 +26,7 @@ private slots:
     void lineNumberVisibilityChangesViewportMargin();
     void editActionsFollowSelectionAndHistory();
     void unsavedClosePromptCanBeCancelled();
+    void aboutActionOpensDialog();
 };
 
 void EditorTests::saveAndReopenRoundTrip()
@@ -202,6 +204,24 @@ void EditorTests::unsavedClosePromptCanBeCancelled()
     });
     QVERIFY(window.close());
     QVERIFY(!window.isVisible());
+}
+
+void EditorTests::aboutActionOpensDialog()
+{
+    MainWindow window;
+    auto *aboutAction =
+        window.findChild<QAction *>(QStringLiteral("actionAbout"));
+    QVERIFY(aboutAction);
+
+    QTimer::singleShot(50, [&window] {
+        AboutDialog *dialog = window.aboutDialogWidget();
+        if (dialog && dialog->isVisible()) {
+            dialog->accept();
+        }
+    });
+    aboutAction->trigger();
+
+    QCOMPARE(window.aboutDialogWidget()->result(), int(QDialog::Accepted));
 }
 
 QTEST_MAIN(EditorTests)

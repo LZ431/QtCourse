@@ -448,9 +448,9 @@ def fill_content(document: Document) -> None:
         content_cell,
         anchor,
         "执行 ctest --test-dir build --output-on-failure，构建目录 1/1 测试通过，"
-        "退出码为 0。QtTest 中共有 7 个功能测试，覆盖 UTF-8 保存/重开、缺失文件、"
+        "退出码为 0。QtTest 中共有 8 个功能测试，覆盖 UTF-8 保存/重开、缺失文件、"
         "二进制文件、连续与环绕查找、大小写不敏感全部替换、行号显隐、动作状态"
-        "以及未保存关闭提示。",
+        "、未保存关闭提示以及关于菜单触发。",
         "自动化结果：",
     )
     anchor = add_code(
